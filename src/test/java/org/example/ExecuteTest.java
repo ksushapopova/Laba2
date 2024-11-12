@@ -1,38 +1,20 @@
 package org.example;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
+public class ExecuteTest {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    @Test
+    public void testInfixToPostfix() {
+        Execute executor = new Execute();
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+        assertEquals("3 4 +", executor.infix_to_postfix("3 + 4"));
+        assertEquals("3 4 2 * +", executor.infix_to_postfix("3 + 4 * 2"));
+        assertEquals("3 4 2 * + 7 -", executor.infix_to_postfix("3 + 4 * 2 - 7"));
+        assertEquals("3 4 2 * + 7 5 ^ -", executor.infix_to_postfix("3 + 4 * 2 - 7 ^ 5"));
+        assertEquals("3 4 2 * + 7 5 ^ 2 / -", executor.infix_to_postfix("3 + 4 * 2 - 7 ^ 5 / 2"));
+        assertEquals("1 2 + 3 *", executor.infix_to_postfix("(1 + 2) * 3"));
+        assertEquals("1 2 + 3 4 + *", executor.infix_to_postfix("(1 + 2) * (3 + 4)"));
     }
 }

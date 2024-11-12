@@ -25,29 +25,34 @@ public class Execute
 
     public String infix_to_postfix(String infix_str) {
         char[] chars = infix_str.toCharArray();
-        String postfix = "";
+        StringBuilder postfix = new StringBuilder();
         Stack<Character> stack = new Stack<>();
         int index = 0;
+
         while (index < chars.length) {
             char chr = chars[index];
 
             if (Character.isDigit(chr)) {
                 int ind = index;
-                while (ind != chars.length && Character.isDigit(chars[ind])) {
-                    postfix += chars[ind];
+                while (ind < chars.length && Character.isDigit(chars[ind])) {
+                    postfix.append(chars[ind]);
                     ind += 1;
                 }
                 index += ind - index - 1;
-                postfix += " ";
+                postfix.append(" "); // добавляем пробел после числа
             } else if (chr == '(') {
                 stack.push('(');
             } else if (chr == ')') {
-                while (!stack.isEmpty() && stack.peek() != '(')
-                    postfix += stack.pop();
-                stack.pop();
+                while (!stack.isEmpty() && stack.peek() != '(') {
+                    postfix.append(stack.pop());
+                    postfix.append(" "); // добавляем пробел после оператора
+                }
+                stack.pop(); // Удаляем '(' из стека
             } else if (is_operator(chr)) {
-                while (!stack.isEmpty() && PRIORITY.get(stack.peek()) >= PRIORITY.get(chr))
-                    postfix += stack.pop();
+                while (!stack.isEmpty() && PRIORITY.get(stack.peek()) >= PRIORITY.get(chr)) {
+                    postfix.append(stack.pop());
+                    postfix.append(" "); // добавляем пробел после оператора
+                }
                 stack.push(chr);
             }
 
@@ -55,10 +60,11 @@ public class Execute
         }
 
         while (!stack.isEmpty()) {
-            postfix += stack.pop();
+            postfix.append(stack.pop());
+            postfix.append(" "); // добавляем пробел после оператора
         }
 
-        return postfix.trim();
+        return postfix.toString().trim(); // удаляем лишний пробел в конце
     }
 
     public double execute(String postfix_str) {
@@ -115,11 +121,4 @@ public class Execute
         return Character.isDigit(chr);
     }
 
-    public static void main(String[] args) {
-        Execute executor = new Execute();
-        String infix = "3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3";
-        String postfix = executor.infix_to_postfix(infix);
-        double result = executor.execute(postfix);
-        System.out.println("Результат: " + result);
-    }
 }
