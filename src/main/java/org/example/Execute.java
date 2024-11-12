@@ -2,10 +2,12 @@ package org.example;
 
 import java.util.HashMap;
 import java.util.Stack;
+
 /**
- * Hello world!
- *
+ * The Execute class provides methods to convert infix expressions to postfix expressions
+ * and to evaluate postfix expressions.
  */
+
 public class Execute
 {
     private static final HashMap<Character, Integer> PRIORITY;
@@ -20,8 +22,19 @@ public class Execute
         PRIORITY.put('^', 3);
     }
 
+    /**
+     * Constructs an Execute object.
+     */
+
     public Execute() {
     }
+
+    /**
+     * Converts an infix expression to a postfix expression.
+     *
+     * @param infix_str the infix expression as a string.
+     * @return the postfix expression as a string.
+     */
 
     public String infix_to_postfix(String infix_str) {
         char[] chars = infix_str.toCharArray();
@@ -66,6 +79,13 @@ public class Execute
 
         return postfix.toString().trim(); // удаляем лишний пробел в конце
     }
+
+    /**
+     * Evaluates a postfix expression and returns the result.
+     *
+     * @param postfix_str the postfix expression as a string.
+     * @return the result of the evaluation as a double.
+     */
 
     public double execute(String postfix_str) {
         Stack<Double> stack = new Stack<>();
@@ -113,9 +133,22 @@ public class Execute
         return stack.pop();
     }
 
+    /**
+     * Checks if the given character is an operator.
+     *
+     * @param chr the character to check.
+     * @return true if the character is an operator; false otherwise.
+     */
     public boolean is_operator(char chr) {
         return PRIORITY.containsKey(chr);
     }
+
+    /**
+     * Checks if the given character is a digit.
+     *
+     * @param chr the character to check.
+     * @return true if the character is a digit; false otherwise.
+     */
 
     public boolean is_digit(char chr) {
         return Character.isDigit(chr);
