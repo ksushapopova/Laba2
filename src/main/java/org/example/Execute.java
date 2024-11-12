@@ -61,14 +61,65 @@ public class Execute
         return postfix.trim();
     }
 
+    public double execute(String postfix_str) {
+        Stack<Double> stack = new Stack<>();
+        char[] chars = postfix_str.toCharArray();
+        int index = 0;
+        while (index < chars.length) {
+            char chr = chars[index];
+
+            if (Character.isDigit(chr)) {
+                String number = "";
+                int ind = index;
+                while (ind != chars.length && Character.isDigit(chars[ind])) {
+                    number += chars[ind];
+                    ind += 1;
+                }
+                index += ind - index;
+                stack.push(Double.parseDouble(number));
+            } else if (PRIORITY.containsKey(chr)) {
+                double operand2 = stack.pop();
+                double operand1 = stack.pop();
+                switch (chr) {
+                    case '+':
+                        stack.push(operand1 + operand2);
+                        break;
+                    case '-':
+                        stack.push(operand1 - operand2);
+                        break;
+                    case '*':
+                        stack.push(operand1 * operand2);
+                        break;
+                    case '/':
+                        stack.push(operand1 / operand2);
+                        break;
+                    case '^':
+                        stack.push(Math.pow(operand1, operand2));
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Неверный оператор: " + chr);
+                }
+            }
+
+            index++;
+        }
+
+        return stack.pop();
+    }
+
     public boolean is_operator(char chr) {
         return PRIORITY.containsKey(chr);
+    }
+
+    public boolean is_digit(char chr) {
+        return Character.isDigit(chr);
     }
 
     public static void main(String[] args) {
         Execute executor = new Execute();
         String infix = "3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3";
         String postfix = executor.infix_to_postfix(infix);
-        System.out.println("Результат: " + postfix);
+        double result = executor.execute(postfix);
+        System.out.println("Результат: " + result);
     }
 }
